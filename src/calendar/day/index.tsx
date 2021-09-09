@@ -9,7 +9,7 @@ import React, {Component} from 'react';
 // @ts-expect-error
 import {shouldUpdate} from '../../component-updater';
 // @ts-expect-error
-import {isToday as dateutils_isToday} from '../../dateutils';
+import {isToday as dateutils_isToday, pDateDay} from '../../dateutils';
 // @ts-expect-error
 import {xdateToData} from '../../interface';
 // @ts-expect-error
@@ -103,12 +103,13 @@ export default class Day extends Component<DayProps> {
   }
 
   render() {
-    const {day, marking} = this.props;
+    const {day, marking, jalali} = this.props;
     const date = xdateToData(day);
     const isToday = dateutils_isToday(day);
     const Component = this.getDayComponent();
     const dayProps = omit(this.props, 'day');
     const accessibilityLabel = this.getAccessibilityLabel(day, marking, isToday);
+    const updatedDate = jalali ? pDateDay(day) : day?.getDate();
 
     return (
       <Component
@@ -117,7 +118,7 @@ export default class Day extends Component<DayProps> {
         testID={`${SELECT_DATE_SLOT}-${date.dateString}`}
         accessibilityLabel={accessibilityLabel}
       >
-        {date ? day?.getDate() : day}
+        {date ? updatedDate : day}
       </Component>
     );
   }

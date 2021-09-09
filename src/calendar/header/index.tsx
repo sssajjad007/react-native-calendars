@@ -8,7 +8,7 @@ import {ActivityIndicator, Platform, View, Text, TouchableOpacity, Image, StyleP
 // @ts-expect-error
 import {shouldUpdate} from '../../component-updater';
 // @ts-expect-error
-import {weekDayNames} from '../../dateutils';
+import {weekDayNames, pFormat} from '../../dateutils';
 import {
   CHANGE_MONTH_LEFT_ARROW,
   CHANGE_MONTH_RIGHT_ARROW,
@@ -21,6 +21,8 @@ import styleConstructor from './style';
 import {Theme, Direction} from '../../types';
 
 interface Props {
+  /** Handler Jalali (Persian) calendar */
+  jalali?: boolean,
   theme?: Theme;
   firstDay?: number;
   displayLoadingIndicator?: boolean;
@@ -60,6 +62,8 @@ class CalendarHeader extends Component<Props> {
   static displayName = 'IGNORE';
 
   static propTypes = {
+    /** Handler Jalali (Persian) calendar */
+    jalali: PropTypes.bool,
     theme: PropTypes.object,
     firstDay: PropTypes.number,
     displayLoadingIndicator: PropTypes.bool,
@@ -92,6 +96,7 @@ class CalendarHeader extends Component<Props> {
 
   static defaultProps = {
     monthFormat: 'MMMM yyyy',
+    jalaliMonthFormat: 'jMMMM jYYYY',
     webAriaLevel: 1
   };
   style: any;
@@ -171,8 +176,12 @@ class CalendarHeader extends Component<Props> {
   });
 
   renderHeader = () => {
-    const {renderHeader, month, monthFormat, testID, webAriaLevel} = this.props;
+    const {renderHeader, month, monthFormat, jalaliMonthFormat, testID, webAriaLevel, jalali} = this.props;
     const webProps = Platform.OS === 'web' ? {'aria-level': webAriaLevel} : {};
+    
+    const formattedMonth = jalali
+        ? pFormat(month, jalaliMonthFormat)
+        : month?.toString(monthFormat);
 
     if (renderHeader) {
       return renderHeader(month);
@@ -186,7 +195,7 @@ class CalendarHeader extends Component<Props> {
           testID={testID ? `${HEADER_MONTH_NAME}-${testID}` : HEADER_MONTH_NAME}
           {...webProps}
         >
-          {month?.toString(monthFormat)}
+          {formattedMonth}
         </Text>
       </Fragment>
     );

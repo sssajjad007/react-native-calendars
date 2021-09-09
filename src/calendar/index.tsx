@@ -31,6 +31,8 @@ type MarkedDatesType = {
 };
 
 export interface CalendarProps extends CalendarHeaderProps, DayProps {
+  /** Handler Jalali (Persian) calendar */
+  jalali?: boolean,
   /** Specify theme properties to override specific styles for calendar parts */
   theme?: Theme;
   /** Specify style for calendar container element */
@@ -89,6 +91,8 @@ class Calendar extends Component<CalendarProps, CalendarState> {
   static propTypes = {
     ...CalendarHeader.propTypes,
     ...Day.propTypes,
+    /** Handler Jalali (Persian) calendar */
+    jalali: PropTypes.bool,
     /** Specify theme properties to override specific styles for calendar parts. Default = {} */
     theme: PropTypes.object,
     /** Specify style for calendar container element. Default = {} */
@@ -141,6 +145,14 @@ class Calendar extends Component<CalendarProps, CalendarState> {
   };
   style = styleConstructor(this.props.theme);
   header: RefObject<CalendarHeader> = React.createRef();
+
+  constructor(props) {
+    super(props);
+
+    if(props.jalali) {
+      XDate.defaultLocale = 'fa';
+    }
+  }
 
   addMonth = (count: number) => {
     this.updateMonth(this.state.currentMonth.clone().addMonths(count, true));
@@ -229,10 +241,10 @@ class Calendar extends Component<CalendarProps, CalendarState> {
   });
 
   renderDay(day: Date, id: number) {
-    const {hideExtraDays, markedDates} = this.props;
+    const {hideExtraDays, markedDates, jalali} = this.props;
     const dayProps = extractComponentProps(Day, this.props);
 
-    if (!sameMonth(day, this.state.currentMonth) && hideExtraDays) {
+    if (!sameMonth(day, this.state.currentMonth, jalali) && hideExtraDays) {
       return <View key={id} style={this.style.emptyDayContainer} />;
     }
 
@@ -245,6 +257,7 @@ class Calendar extends Component<CalendarProps, CalendarState> {
           marking={markedDates?.[toMarkingFormat(day)]}
           onPress={this.pressDay}
           onLongPress={this.longPressDay}
+          jalali={jalali}
         />
       </View>
     );
@@ -270,9 +283,10 @@ class Calendar extends Component<CalendarProps, CalendarState> {
 
   renderMonth() {
     const {currentMonth} = this.state;
-    const {firstDay, showSixWeeks, hideExtraDays} = this.props;
+    const {firstDay, showSixWeeks, hideExtraDays, jalali} = this.props;
     const shouldShowSixWeeks = showSixWeeks && !hideExtraDays;
-    const days = page(currentMonth, firstDay, shouldShowSixWeeks);
+    const updatedFirstDay = (!firstDay && jalali) ? 6 : firstDay;
+    const days = page(currentMonth, updatedFirstDay, shouldShowSixWeeks, jalali);
     const weeks = [];
 
     while (days.length) {
@@ -283,7 +297,7 @@ class Calendar extends Component<CalendarProps, CalendarState> {
   }
 
   renderHeader() {
-    const {customHeader, headerStyle, displayLoadingIndicator, markedDates, testID} = this.props;
+    const {customHeader, headerStyle, displayLoadingIndicator, markedDates, testID, jalali, firstDay} = this.props;
     const current = parseDate(this.props.current);
     let indicator;
 
@@ -298,6 +312,8 @@ class Calendar extends Component<CalendarProps, CalendarState> {
     const CustomHeader = customHeader;
     const HeaderComponent = customHeader ? CustomHeader : CalendarHeader;
 
+    const updatedFirstDay = (!firstDay && jalali) ? 6 : firstDay;
+
     return (
       <HeaderComponent
         {...headerProps}
@@ -307,6 +323,7 @@ class Calendar extends Component<CalendarProps, CalendarState> {
         month={this.state.currentMonth}
         addMonth={this.addMonth}
         displayLoadingIndicator={indicator}
+        firstDay={updatedFirstDay}
       />
     );
   }
