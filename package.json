@@ -1,8 +1,8 @@
 {
-  "name": "react-native-calendars",
+  "name": "react-native-calendars-jalali",
   "version": "1.22.0",
   "main": "src/index.js",
-  "description": "React Native Calendar Components",
+  "description": "React Native Calendar Components + Jalali (Persian) Calendar Support",
   "scripts": {
     "build": "xcodebuild -project ios/CalendarsExample.xcodeproj build",
     "build:ts": "tsc",
@@ -21,18 +21,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wix/react-native-calendars"
+    "url": "git+https://github.com/2012mjm/react-native-calendars-jalali"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "author": "Wix.com",
+  "author": "Wix.com, Mohammad Javad Masoudian",
   "license": "MIT",
   "dependencies": {
     "hoist-non-react-statics": "^3.3.1",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
     "memoize-one": "^5.2.1",
+    "moment-jalaali": "^0.9.2",
     "prop-types": "^15.5.10",
     "react-native-swipe-gestures": "^1.0.5",
     "xdate": "^0.8.0"
