@@ -1,11 +1,16 @@
 const XDate = require('xdate');
 const {parseDate} = require('./interface');
 
-function sameMonth(a, b) {
-  return (
-    a instanceof XDate && b instanceof XDate && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth()
-  );
-}
+const PersianDateUtils = require('./persian/dateutils');
+const {pFormat, pDateDay, pSetLocale, pDiffMonths, sameMonth, month} = PersianDateUtils;
+
+pSetLocale();
+
+// function sameMonth(a, b) {
+//   return (
+//     a instanceof XDate && b instanceof XDate && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth()
+//   );
+// }
 
 function sameDate(a, b) {
   return (
@@ -44,16 +49,16 @@ function fromTo(a, b) {
   return days;
 }
 
-function month(xd) {
-  const year = xd.getFullYear(),
-    month = xd.getMonth();
-  const days = new Date(year, month + 1, 0).getDate();
+// function month(xd) {
+//   const year = xd.getFullYear(),
+//     month = xd.getMonth();
+//   const days = new Date(year, month + 1, 0).getDate();
 
-  const firstDay = new XDate(year, month, 1, 0, 0, 0, true);
-  const lastDay = new XDate(year, month, days, 0, 0, 0, true);
+//   const firstDay = new XDate(year, month, 1, 0, 0, 0, true);
+//   const lastDay = new XDate(year, month, days, 0, 0, 0, true);
 
-  return fromTo(firstDay, lastDay);
-}
+//   return fromTo(firstDay, lastDay);
+// }
 
 function weekDayNames(firstDayOfWeek = 0) {
   let weekDaysNames = XDate.locales[XDate.defaultLocale].dayNamesShort;
@@ -64,8 +69,8 @@ function weekDayNames(firstDayOfWeek = 0) {
   return weekDaysNames;
 }
 
-function page(xd, firstDayOfWeek, showSixWeeks) {
-  const days = month(xd);
+function page(xd, firstDayOfWeek, showSixWeeks, jalali = false) {
+  const days = month(xd, jalali);
   let before = [],
     after = [];
 
@@ -154,5 +159,8 @@ export {
   isLTE,
   isGTE,
   isDateNotInTheRange,
-  getWeekDates
+  getWeekDates,
+  pDiffMonths,
+  pFormat,
+  pDateDay
 };
