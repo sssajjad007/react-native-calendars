@@ -10,7 +10,7 @@ import {extractComponentProps} from '../component-updater';
 // @ts-expect-error
 import {xdateToData, parseDate} from '../interface';
 // @ts-expect-error
-import {page, sameDate} from '../dateutils';
+import {page, sameDate, pFormat, pDiffMonths} from '../dateutils';
 // @ts-expect-error
 import {STATIC_HEADER} from '../testIDs';
 import styleConstructor from './style';
@@ -150,7 +150,7 @@ class CalendarList extends Component<Props, State> {
 
     for (let i = 0; i <= pastScrollRange + futureScrollRange; i++) {
       const rangeDate = date.clone().addMonths(i - pastScrollRange, true);
-      const rangeDateStr = rangeDate.toString('MMM yyyy');
+      const rangeDateStr = props.jalali ? pFormat(rangeDate, 'jMMMM jYYYY') : rangeDate.toString('MMM yyyy');
       texts.push(rangeDateStr);
       /*
        * This selects range around current shown month [-0, +2] or [-1, +1] month for detail calendar rendering.
@@ -201,15 +201,23 @@ class CalendarList extends Component<Props, State> {
   }
 
   scrollToDay(d: XDate, offset: number, animated: boolean) {
-    const {horizontal, calendarHeight = CALENDAR_HEIGHT, calendarWidth = CALENDAR_WIDTH, pastScrollRange = PAST_SCROLL_RANGE, firstDay} = this.props;
+    const {horizontal, calendarHeight = CALENDAR_HEIGHT, calendarWidth = CALENDAR_WIDTH, pastScrollRange = PAST_SCROLL_RANGE, firstDay, jalali} = this.props;
     const day = parseDate(d);
-    const diffMonths = Math.round(this.state.openDate.clone().setDate(1).diffMonths(day.clone().setDate(1)));
+
+    let diffMonths = 0;
+    if (jalali) {
+        diffMonths = pDiffMonths(this.state.openDate, day);
+    } else {
+        diffMonths = Math.round(this.state.openDate.clone().setDate(1).diffMonths(day.clone().setDate(1)));
+    }
+
     const size = horizontal ? calendarWidth : calendarHeight;
     let scrollAmount = size * pastScrollRange + diffMonths * size + (offset || 0);
 
     if (!horizontal) {
       let week = 0;
-      const days = page(day, firstDay);
+      const updatedFirstDay = (!firstDay && jalali) ? 6 : firstDay;
+      const days = page(day, updatedFirstDay, jalali);
       for (let i = 0; i < days.length; i++) {
         week = Math.floor(i / 7);
         if (sameDate(days[i], day)) {
@@ -310,7 +318,7 @@ class CalendarList extends Component<Props, State> {
   };
 
   renderItem = ({item}: any) => {
-    const {calendarStyle, horizontal, calendarWidth, testID, ...others} = this.props;
+    const {calendarStyle, horizontal, calendarWidth, testID, jalali, ...others} = this.props;
 
     return (
       <CalendarListItem
@@ -321,6 +329,7 @@ class CalendarList extends Component<Props, State> {
         horizontal={horizontal}
         calendarWidth={horizontal ? calendarWidth : undefined}
         scrollToMonth={this.scrollToMonth}
+        jalali={jalali}
       />
     );
   };
