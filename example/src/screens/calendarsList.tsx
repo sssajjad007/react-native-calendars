@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 // @ts-expect-error
-import {CalendarList} from 'react-native-calendars';
-
+import {CalendarList} from '../../../src'; // react-native-calendars-jalali
+import {pFormat} from '../../../src/dateutils';
 
 const testIDs = require('../testIDs');
 const RANGE = 24;
@@ -25,8 +25,9 @@ const CalendarsList = () => {
 
   return (
     <CalendarList
+      jalali
       testID={testIDs.calendarList.CONTAINER}
-      current={initialDate}
+      // current={initialDate}
       pastScrollRange={RANGE}
       futureScrollRange={RANGE}
       renderHeader={renderCustomHeader}
@@ -56,8 +57,11 @@ const theme = {
   }
 };
 
-function renderCustomHeader(date) {
-  const header = date.toString('MMMM yyyy');
+function renderCustomHeader(date, jalali=true) {
+  const header = jalali
+  ? pFormat(date, 'jMMMM jYYYY')
+  : date?.toString('MMMM yyyy');
+
   const [month, year] = header.split(' ');
   const textStyle = {
     fontSize: 18,

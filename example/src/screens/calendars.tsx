@@ -1,7 +1,7 @@
 import React, {useState, Fragment} from 'react';
 import {StyleSheet, View, ScrollView, Text, TouchableOpacity, Switch} from 'react-native';
 // @ts-expect-error
-import {Calendar} from 'react-native-calendars';
+import {Calendar} from '../../../src'; // react-native-calendars-jalali
 
 const testIDs = require('../testIDs');
 const INITIAL_DATE = '2020-02-02';
@@ -23,6 +23,7 @@ const CalendarsScreen = () => {
       <Fragment>
         <Text style={styles.text}>Calendar with selectable date</Text>
         <Calendar
+          jalali
           testID={testIDs.calendars.FIRST}
           current={INITIAL_DATE}
           style={styles.calendar}
@@ -54,6 +55,7 @@ const CalendarsScreen = () => {
       <Fragment>
         <Text style={styles.text}>Calendar with min and max dates</Text>
         <Calendar
+          jalali
           style={styles.calendar}
           hideExtraDays
           current={'2012-05-16'}
@@ -69,6 +71,7 @@ const CalendarsScreen = () => {
       <Fragment>
         <Text style={styles.text}>Calendar with marked dates and hidden arrows</Text>
         <Calendar
+          jalali
           style={styles.calendar}
           current={'2012-05-16'}
           hideExtraDays
@@ -93,6 +96,7 @@ const CalendarsScreen = () => {
       <Fragment>
         <Text style={styles.text}>Calendar with multi-dot marking</Text>
         <Calendar
+          jalali
           style={styles.calendar}
           current={'2012-05-16'}
           markingType={'multi-dot'}
@@ -122,6 +126,7 @@ const CalendarsScreen = () => {
       <Fragment>
         <Text style={styles.text}>Calendar with period marking and spinner</Text>
         <Calendar
+          jalali
           // style={styles.calendar}
           current={'2012-05-16'}
           minDate={'2012-05-10'}
@@ -169,6 +174,7 @@ const CalendarsScreen = () => {
       <Fragment>
         <Text style={styles.text}>Calendar with period marking and dot marking</Text>
         <Calendar
+          jalali
           current={'2012-05-16'}
           minDate={'2012-05-01'}
           markingType={'period'}
@@ -211,6 +217,7 @@ const CalendarsScreen = () => {
       <Fragment>
         <Text style={styles.text}>Calendar with multi-period marking</Text>
         <Calendar
+          jalali
           style={styles.calendar}
           current={'2012-05-16'}
           markingType={'multi-period'}
@@ -246,6 +253,7 @@ const CalendarsScreen = () => {
       <Fragment>
         <Text style={styles.text}>Custom calendar with custom marking type</Text>
         <Calendar
+          jalali
           style={styles.calendar}
           hideExtraDays
           current={'2018-03-01'}
@@ -343,6 +351,7 @@ const CalendarsScreen = () => {
       <Fragment>
         <Text style={styles.text}>Calendar with custom day component</Text>
         <Calendar
+          jalali
           style={[styles.calendar, styles.customCalendar]}
           dayComponent={({date, state}) => {
             return (
@@ -374,6 +383,7 @@ const CalendarsScreen = () => {
       <Fragment>
         <Text style={styles.text}>Calendar with custom header component</Text>
         <Calendar
+          jalali
           testID={testIDs.calendars.LAST}
           style={[styles.calendar, styles.customCalendar]}
           customHeader={CustomHeader}
@@ -387,6 +397,7 @@ const CalendarsScreen = () => {
       <Fragment>
         <Text style={styles.text}>Calendar with inactive days</Text>
         <Calendar
+          jalali
           style={styles.calendar}
           disableAllTouchEventsForInactiveDays
           current={INITIAL_DATE}

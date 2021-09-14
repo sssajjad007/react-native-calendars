@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 // @ts-expect-error
-import {CalendarList} from 'react-native-calendars';
+import {CalendarList} from '../../../src'; // react-native-calendars-jalali
 
 
 const testIDs = require('../testIDs');
@@ -21,6 +21,7 @@ const HorizontalCalendarList = () => {
 
   return (
     <CalendarList
+      jalali
       testID={testIDs.horizontalList.CONTAINER}
       markedDates={markedDates}
       current={initialDate}
@@ -29,6 +30,7 @@ const HorizontalCalendarList = () => {
       horizontal
       pagingEnabled
       onDayPress={onDayPress}
+      showScrollIndicator
     />
   );
 };
