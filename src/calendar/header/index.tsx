@@ -31,6 +31,8 @@ interface Props {
   addMonth?: (num: number) => void;
   /** Month format in the title. Formatting values: http://arshaw.com/xdate/#Formatting */
   monthFormat?: string;
+  /** Jalali Month format in the title. Formatting values: https://www.npmjs.com/package/jalali-moment */
+  jalaliMonthFormat?: string,
   /**  Hide day names */
   hideDayNames?: boolean;
   /** Hide month navigation arrows */
@@ -72,6 +74,8 @@ class CalendarHeader extends Component<Props> {
     addMonth: PropTypes.func,
     /** Month format in the title. Formatting values: http://arshaw.com/xdate/#Formatting */
     monthFormat: PropTypes.string,
+    /** Jalali Month format in the title. Formatting values: https://www.npmjs.com/package/jalali-moment */
+    jalaliMonthFormat: PropTypes.string,
     /**  Hide day names. Default = false */
     hideDayNames: PropTypes.bool,
     /** Hide month navigation arrows. Default = false */
@@ -117,6 +121,7 @@ class CalendarHeader extends Component<Props> {
       'firstDay',
       'showWeekNumbers',
       'monthFormat',
+      'jalaliMonthFormat',
       'renderArrow',
       'disableArrowLeft',
       'disableArrowRight'

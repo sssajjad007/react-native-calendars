@@ -12,6 +12,8 @@ import styleConstructor from './style';
 import Marking, {MarkingTypes, MarkingProps} from '../marking';
 
 export interface BasicDayProps {
+  /** Handler Jalali (Persian) calendar */
+  jalali?: boolean;
   state?: DayState;
   /** The marking object */
   marking?: MarkingProps;

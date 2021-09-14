@@ -146,7 +146,7 @@ class Calendar extends Component<CalendarProps, CalendarState> {
   style = styleConstructor(this.props.theme);
   header: RefObject<CalendarHeader> = React.createRef();
 
-  constructor(props) {
+  constructor(props: any) {
     super(props);
 
     if(props.jalali) {
