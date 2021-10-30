@@ -18,7 +18,7 @@ import {
   ColorValue
 } from 'react-native';
 // @ts-expect-error
-import {shouldUpdate} from '../../component-updater';
+import {shouldUpdate} from '../../componentUpdater';
 // @ts-expect-error
 import {formatNumbers, weekDayNames, pFormat} from '../../dateutils';
 
