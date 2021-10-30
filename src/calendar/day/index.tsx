@@ -8,16 +8,13 @@ import React, {Component} from 'react';
 
 // @ts-expect-error
 import {shouldUpdate} from '../../component-updater';
-// @ts-expect-error
-import {isToday as dateutils_isToday, pDateDay} from '../../dateutils';
-// @ts-expect-error
+import {formatNumbers, isToday as dateutils_isToday, pDateDay} from '../../dateutils';
+
 import {xdateToData} from '../../interface';
-// @ts-expect-error
 import {SELECT_DATE_SLOT} from '../../testIDs';
 import BasicDay, {BasicDayProps} from './basic';
 import PeriodDay from './period';
 import {MarkingProps} from './marking';
-
 
 const basicDayPropsTypes = omit(BasicDay.propTypes, 'date');
 
@@ -104,21 +101,21 @@ export default class Day extends Component<DayProps> {
 
   render() {
     const {day, marking, jalali} = this.props;
-    const date = xdateToData(day);
-    const isToday = dateutils_isToday(day);
+    const date = day && xdateToData(day);
+    const _isToday = day ? dateutils_isToday(day) : undefined;
     const Component = this.getDayComponent();
     const dayProps = omit(this.props, 'day');
-    const accessibilityLabel = this.getAccessibilityLabel(day, marking, isToday);
+    const accessibilityLabel = this.getAccessibilityLabel(day, marking, _isToday);
     const updatedDate = jalali ? pDateDay(day) : day?.getDate();
 
     return (
       <Component
         {...dayProps}
         date={date}
-        testID={`${SELECT_DATE_SLOT}-${date.dateString}`}
+        testID={`${SELECT_DATE_SLOT}-${date?.dateString}`}
         accessibilityLabel={accessibilityLabel}
       >
-        {date ? updatedDate : day}
+        {formatNumbers(date ? updatedDate : day)}
       </Component>
     );
   }

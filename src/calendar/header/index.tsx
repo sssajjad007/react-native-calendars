@@ -4,18 +4,30 @@ import memoize from 'memoize-one';
 import XDate from 'xdate';
 
 import React, {Component, Fragment, ReactNode} from 'react';
-import {ActivityIndicator, Platform, View, Text, TouchableOpacity, Image, StyleProp, ViewStyle, AccessibilityActionEvent, ColorValue} from 'react-native';
+
+import {
+  ActivityIndicator,
+  Platform,
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleProp,
+  ViewStyle,
+  AccessibilityActionEvent,
+  ColorValue
+} from 'react-native';
 // @ts-expect-error
 import {shouldUpdate} from '../../component-updater';
 // @ts-expect-error
-import {weekDayNames, pFormat} from '../../dateutils';
+import {formatNumbers, weekDayNames, pFormat} from '../../dateutils';
+
 import {
   CHANGE_MONTH_LEFT_ARROW,
   CHANGE_MONTH_RIGHT_ARROW,
   HEADER_DAY_NAMES,
   HEADER_LOADING_INDICATOR,
   HEADER_MONTH_NAME
-  // @ts-expect-error
 } from '../../testIDs';
 import styleConstructor from './style';
 import {Theme, Direction} from '../../types';
@@ -124,7 +136,8 @@ class CalendarHeader extends Component<Props> {
       'jalaliMonthFormat',
       'renderArrow',
       'disableArrowLeft',
-      'disableArrowRight'
+      'disableArrowRight',
+      'renderHeader'
     ]);
   }
 
@@ -186,7 +199,7 @@ class CalendarHeader extends Component<Props> {
     
     const formattedMonth = jalali
         ? pFormat(month, jalaliMonthFormat)
-        : month?.toString(monthFormat);
+        : formatNumbers(month?.toString(monthFormat));
 
     if (renderHeader) {
       return renderHeader(month);

@@ -3,21 +3,15 @@ import PropTypes from 'prop-types';
 import XDate from 'xdate';
 import memoize from 'memoize-one';
 
-import React, {Component, RefObject} from 'react';
+import React, {Component} from 'react';
 import {View, ViewStyle, StyleProp} from 'react-native';
 // @ts-expect-error
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
-// @ts-expect-error
 import {page, isGTE, isLTE, sameMonth} from '../dateutils';
-// @ts-expect-error
 import {xdateToData, parseDate, toMarkingFormat} from '../interface';
-// @ts-expect-error
 import {getState} from '../day-state-manager';
-// import shouldComponentUpdate from './updater';
-// @ts-expect-error
-import {extractComponentProps} from '../component-updater';
-// @ts-expect-error
+import {extractComponentProps} from '../componentUpdater';
 import {WEEK_NUMBER} from '../testIDs';
 import {Theme, DateData} from '../types';
 import styleConstructor from './style';
@@ -25,6 +19,7 @@ import CalendarHeader, {CalendarHeaderProps} from './header';
 import Day, {DayProps} from './day/index';
 import BasicDay from './day/basic';
 import {MarkingProps} from './day/marking';
+
 
 type MarkedDatesType = {
   [key: string]: MarkingProps;
@@ -144,7 +139,7 @@ class Calendar extends Component<CalendarProps, CalendarState> {
     currentMonth: this.props.current ? parseDate(this.props.current) : new XDate()
   };
   style = styleConstructor(this.props.theme);
-  header: RefObject<CalendarHeader> = React.createRef();
+  header: React.RefObject<any> = React.createRef();
 
   constructor(props: any) {
     super(props);
@@ -253,8 +248,8 @@ class Calendar extends Component<CalendarProps, CalendarState> {
         <Day
           {...dayProps}
           day={day}
-          state={getState(day, this.state.currentMonth, this.props)}
-          marking={markedDates?.[toMarkingFormat(day)]}
+          state={getState(new XDate(day), this.state.currentMonth, this.props)}
+          marking={markedDates?.[toMarkingFormat(new XDate(day))]}
           onPress={this.pressDay}
           onLongPress={this.longPressDay}
           jalali={jalali}
@@ -311,15 +306,15 @@ class Calendar extends Component<CalendarProps, CalendarState> {
     const headerProps = extractComponentProps(CalendarHeader, this.props);
     const CustomHeader = customHeader;
     const HeaderComponent = customHeader ? CustomHeader : CalendarHeader;
-
+    
     const updatedFirstDay = (!firstDay && jalali) ? 6 : firstDay;
-
+    const ref = customHeader ?  undefined : this.header;
     return (
       <HeaderComponent
         {...headerProps}
         testID={testID}
         style={headerStyle}
-        ref={this.header}
+        ref={ref}
         month={this.state.currentMonth}
         addMonth={this.addMonth}
         displayLoadingIndicator={indicator}

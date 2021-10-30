@@ -2,6 +2,7 @@ import first from 'lodash/first';
 import invoke from 'lodash/invoke';
 import values from 'lodash/values';
 import isFunction from 'lodash/isFunction';
+import throttle from 'lodash/throttle';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import XDate from 'xdate';
@@ -9,11 +10,8 @@ import XDate from 'xdate';
 import React, {Component} from 'react';
 import {AccessibilityInfo, PanResponder, Animated, View, ViewStyle, Text, Image, ImageSourcePropType, PanResponderInstance, GestureResponderEvent, PanResponderGestureState} from 'react-native';
 
-// @ts-expect-error
 import {CALENDAR_KNOB} from '../testIDs';
-// @ts-expect-error
 import {page, weekDayNames} from '../dateutils';
-// @ts-expect-error
 import {parseDate, toMarkingFormat} from '../interface';
 import {Theme, DateData, Direction} from 'types';
 import styleConstructor, {HEADER_HEIGHT} from './style';
@@ -428,7 +426,7 @@ class ExpandableCalendar extends Component<Props, State> {
     }
   };
 
-  onVisibleMonthsChange = (value: DateData[]) => {
+  onVisibleMonthsChange = throttle((value: DateData[]) => {
     const month = first(value)?.month; // equivalent to this.getMonth(value[0].dateString)
     if (month && this.visibleMonth !== month) {
       this.visibleMonth = month; 
@@ -458,7 +456,7 @@ class ExpandableCalendar extends Component<Props, State> {
         }
       }, 0);
     }
-  };
+  }, 100, {trailing: true, leading: false});
 
   /** Renders */
   getWeekDaysStyle = memoize(calendarStyle => {

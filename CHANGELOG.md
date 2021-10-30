@@ -724,3 +724,30 @@
 
 ## Changed
 - Disabling Detox e2e tests.
+
+## [1.1267.0] - 2021-10-5
+
+## Fixed
+- CalendarListItem - height issue (PR #1614).
+- README - links for typescript (PR #1611).
+- lodash - change imports to make it tree-shakeable (PR #1613).
+- ExpandableCalendar - 'today' button bug (PR #1627).
+- CalendarHeader - 'renderHeader' updates.
+- Calendar - 'customHeader' ref.
+- CalendarList - fix types.
+
+## Added
+- Calendar - 'allowSelectionOutOfRange' prop (PR #1618).
+- AgendaList - 'scrollToNextEvent' prop (PR #1636).
+- Number localization (PR #1369).
+- TS types release.
+
+## Changed
+- Use modern export keyword (PR #1615).
+- Remove global and move types to types.ts.
+
+## [1.1268.0] - 2021-10-11
+
+## Fixed
+- Demo app load.
+- ExpandableCalendar - add throttle to onVisibleMonthsChange callback.
