@@ -9,7 +9,7 @@ const cache = {
   months: {}
 };
 
-let isIntlSupported = typeof Intl !== 'undefined' && typeof Intl.DateTimeFormat === 'function';
+// let isIntlSupported = typeof Intl !== 'undefined' && typeof Intl.DateTimeFormat === 'function';
 
 function pFormat(xd, format) {
   return toPersian(moment(typeof xd === 'string' ? xd : xd.toDate()).format(format));
@@ -54,10 +54,10 @@ function pDateDay(xd) {
     return cache.dates[key];
   }
 
-  if (isIntlSupported) {
-    const options = {day: 'numeric'};
-    return (cache.dates[key] = new Intl.DateTimeFormat('fa-IR', options).format(xd.toDate()));
-  }
+  // if (isIntlSupported) {
+  //   const options = {day: 'numeric'};
+  //   return (cache.dates[key] = new Intl.DateTimeFormat('fa-IR', options).format(xd.toDate()));
+  // }
 
   return (cache.dates[key] = toPersian(pMoment(xd).jDate()));
 }
@@ -82,14 +82,14 @@ function sameMonth(a, b, jalali = false) {
 
 function isSameMonth(a, b, jalali = false) {
   if (jalali) {
-    if (isIntlSupported) {
-      const options = {year: 'numeric', month: 'numeric'};
+    // if (isIntlSupported) {
+    //   const options = {year: 'numeric', month: 'numeric'};
 
-      a = new Intl.DateTimeFormat('fa-IR', options).format(a.toDate());
-      b = new Intl.DateTimeFormat('fa-IR', options).format(b.toDate());
+    //   a = new Intl.DateTimeFormat('fa-IR', options).format(a.toDate());
+    //   b = new Intl.DateTimeFormat('fa-IR', options).format(b.toDate());
 
-      return a === b;
-    }
+    //   return a === b;
+    // }
 
     // Android does not supoort Intl
     // pDate is too slow
