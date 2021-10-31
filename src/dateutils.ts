@@ -1,6 +1,8 @@
 const XDate = require('xdate');
 const {parseDate} = require('./interface');
 
+const latinNumbersPattern = /[0-9]/g;
+
 const PersianDateUtils = require('./persian/dateutils');
 const {pFormat, pDateDay, pSetLocale, pDiffMonths, sameMonth, month} = PersianDateUtils;
 
@@ -12,35 +14,35 @@ pSetLocale();
 //   );
 // }
 
-export function sameDate(a: XDate, b: XDate) {
+function sameDate(a: XDate, b: XDate) {
   return a.getFullYear() === b.getFullYear() &&
     a.getMonth() === b.getMonth() &&
     a.getDate() === b.getDate();
 }
 
-export function sameWeek(a: XDate, b: XDate, firstDayOfWeek: number) {
+function sameWeek(a: XDate, b: XDate, firstDayOfWeek: number) {
   const weekDates = getWeekDates(a, firstDayOfWeek, 'yyyy-MM-dd');
   return weekDates?.includes(b);
 }
 
-export function isToday(date: XDate) {
+function isToday(date: XDate) {
   return sameDate(date, XDate.today());
 }
 
-export function isGTE(a: XDate, b: XDate) {
+function isGTE(a: XDate, b: XDate) {
   return b.diffDays(a) > -1;
 }
 
-export function isLTE(a: XDate, b: XDate) {
+function isLTE(a: XDate, b: XDate) {
   return a.diffDays(b) > -1;
 }
 
-export function formatNumbers(date: any) {
+function formatNumbers(date: any) {
   const numbers = XDate.locales[XDate.defaultLocale].numbers;
   return numbers ? date.toString().replace(latinNumbersPattern, (char: any) => numbers[+char]) : date;
 }
 
-export function fromTo(a: XDate, b: XDate) {
+function fromTo(a: XDate, b: XDate) {
   const days = [];
   let from = +a,
     to = +b;
@@ -61,7 +63,7 @@ export function fromTo(a: XDate, b: XDate) {
 //   return fromTo(firstDay, lastDay);
 // }
 
-export function weekDayNames(firstDayOfWeek = 0) {
+function weekDayNames(firstDayOfWeek = 0) {
   let weekDaysNames = XDate.locales[XDate.defaultLocale].dayNamesShort;
   const dayShift = firstDayOfWeek % 7;
   if (dayShift) {
@@ -70,8 +72,8 @@ export function weekDayNames(firstDayOfWeek = 0) {
   return weekDaysNames;
 }
 
-function page(xd, firstDayOfWeek = 0, showSixWeeks = false, jalali = false) {
-  const days = month(xd, jalali);
+function page(date: XDate, firstDayOfWeek = 0, showSixWeeks = false, jalali = false) {
+  const days = month(date, jalali);
   let before = [],
     after = [];
 
@@ -110,11 +112,11 @@ function page(xd, firstDayOfWeek = 0, showSixWeeks = false, jalali = false) {
   return before.concat(days.slice(1, days.length - 1), after);
 }
 
-export function isDateNotInTheRange(minDate: XDate, maxDate: XDate, date: XDate) {
+function isDateNotInTheRange(minDate: XDate, maxDate: XDate, date: XDate) {
   return (minDate && !isGTE(date, minDate)) || (maxDate && !isLTE(date, maxDate));
 }
 
-export function getWeekDates(date: XDate, firstDay = 0, format?: string) {
+function getWeekDates(date: XDate, firstDay = 0, format?: string) {
   if (date && parseDate(date).valid()) {
     const current = parseDate(date);
     const daysArray = [current];
@@ -163,5 +165,6 @@ export {
   getWeekDates,
   pDiffMonths,
   pFormat,
-  pDateDay
+  pDateDay,
+  formatNumbers
 };

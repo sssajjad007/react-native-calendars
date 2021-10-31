@@ -1,6 +1,6 @@
 {
   "name": "react-native-calendars-jalali",
-  "version": "1.22.2",
+  "version": "1.22.6",
   "main": "src/index.ts",
   "types": "src/index.d.ts",
   "description": "React Native Calendar Components + Jalali (Persian) Calendar Support",
