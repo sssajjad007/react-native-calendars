@@ -5,7 +5,7 @@ import {xdateToData} from '../../../interface';
 import {Theme, DayState, MarkingTypes, DateData} from '../../../types';
 import styleConstructor from './style';
 import Marking, {MarkingProps} from '../marking';
-import {selectedUserDateInjected} from '../../../expandableCalendar';
+import shareData from '../../../shareDate';
 
 export interface BasicDayProps extends ViewProps {
   state?: DayState;
@@ -51,7 +51,9 @@ const BasicDay = (props: BasicDayProps) => {
   const style = useRef(styleConstructor(theme));
   const _marking = marking || {};
   const isSelected = _marking.selected || state === 'selected';
-  const userSelectedDate = selectedUserDateInjected() === date;
+  const userSelectedDate =
+    shareData.calendar.selectedUserDateInjected() === date ||
+    shareData.calendar.selectedUserDateInjectedToday() === date;
   const isDisabled = typeof _marking.disabled !== 'undefined' ? _marking.disabled : state === 'disabled';
   const isInactive = _marking?.inactive;
   const isToday = state === 'today';

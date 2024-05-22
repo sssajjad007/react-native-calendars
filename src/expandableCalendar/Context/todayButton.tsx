@@ -10,12 +10,11 @@ import {isToday, isPastDate} from '../../dateutils';
 import {UpdateSources, todayString} from '../commons';
 import styleConstructor from '../style';
 import Context from './index';
-import {selectedUserDateInjected} from '../../expandableCalendar';
+import shareData from '../../shareDate';
 
 const TOP_POSITION = 65;
 const DOWN_ICON = require('../../img/down.png');
 const UP_ICON = require('../../img/up.png');
-export let goToTodayInjected = () => {};
 export interface TodayButtonProps extends ViewProps {
   /** The opacity for the disabled button (0-1) */
   disabledOpacity?: number;
@@ -129,10 +128,13 @@ const TodayButton = (props: TodayButtonProps, ref: any) => {
   };
 
   const onPress = useCallback(() => {
-    selectedUserDateInjected = () => getTodayDate();
-    setDate(getTodayDate(), UpdateSources.TODAY_PRESS);
+    const today = getTodayDate();
+    shareData.calendar.selectedUserDateInjected = () => null;
+    shareData.calendar.selectedUserDateInjectedToday = () => today;
+    setDate(today, UpdateSources.TODAY_PRESS);
   }, [setDate]);
-  goToTodayInjected = onPress;
+
+  shareData.calendar.goToTodayInjected = onPress;
   return (
     <Animated.View style={[style.current.todayButtonContainer, {transform: [{translateY: buttonY.current}]}]}>
       <TouchableOpacity style={[style.current.todayButton, propsStyle]} onPress={onPress} disabled={disabled}>

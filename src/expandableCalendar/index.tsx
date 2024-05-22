@@ -31,13 +31,12 @@ import WeekCalendar from './WeekCalendar';
 import Context from './Context';
 import constants from '../commons/constants';
 import {UpdateSources} from './commons';
+import shareData from '../shareDate';
 
 export enum Positions {
   CLOSED = 'closed',
   OPEN = 'open'
 }
-export let goToCloseCalendarInjected = () => {};
-export let selectedUserDateInjected = () => {};
 const SPEED = 20;
 const BOUNCINESS = 6;
 const CLOSED_HEIGHT = 120; // header + 1 week
@@ -446,7 +445,7 @@ const ExpandableCalendar = (props: ExpandableCalendarProps) => {
       }
     }, 0);
   }, [isOpen, closedHeight]);
-  goToCloseCalendarInjected = closeCalendar;
+  shareData.calendar.goToCloseCalendarInjected = closeCalendar;
 
   const toggleCalendarPosition = useCallback(() => {
     bounceToPosition(isOpen ? closedHeight : openHeight.current);
@@ -473,7 +472,8 @@ const ExpandableCalendar = (props: ExpandableCalendarProps) => {
   const _onDayPress = useCallback(
     (value: DateData) => {
       if (numberOfDaysCondition) {
-        selectedUserDateInjected = () => value.dateString;
+        shareData.calendar.selectedUserDateInjectedToday = () => null;
+        shareData.calendar.selectedUserDateInjected = () => value.dateString;
         setDate?.(value.dateString, UpdateSources.DAY_PRESS);
       }
       if (closeOnDayPress) {
