@@ -5,7 +5,7 @@ import {xdateToData} from '../../../interface';
 import {Theme, DayState, MarkingTypes, DateData} from '../../../types';
 import styleConstructor from './style';
 import Marking, {MarkingProps} from '../marking';
-import {selectedUserDateInjected} from 'src/expandableCalendar';
+import {selectedUserDateInjected} from '../../../expandableCalendar';
 
 export interface BasicDayProps extends ViewProps {
   state?: DayState;
