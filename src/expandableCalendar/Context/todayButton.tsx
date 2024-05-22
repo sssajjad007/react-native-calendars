@@ -10,11 +10,12 @@ import {isToday, isPastDate} from '../../dateutils';
 import {UpdateSources, todayString} from '../commons';
 import styleConstructor from '../style';
 import Context from './index';
+import {selectedUserDateInjected} from '../../expandableCalendar';
 
 const TOP_POSITION = 65;
 const DOWN_ICON = require('../../img/down.png');
 const UP_ICON = require('../../img/up.png');
-
+export let goToTodayInjected = () => {};
 export interface TodayButtonProps extends ViewProps {
   /** The opacity for the disabled button (0-1) */
   disabledOpacity?: number;
@@ -36,12 +37,7 @@ const TodayButton = (props: TodayButtonProps, ref: any) => {
     }
   }));
 
-  const {
-    margin = 0,
-    disabledOpacity = 0.3,
-    theme,
-    style: propsStyle,
-  } = props;
+  const {margin = 0, disabledOpacity = 0.3, theme, style: propsStyle} = props;
   const {date, setDate} = useContext(Context);
   const [disabled, setDisabled] = useState(false);
   const style = useRef(styleConstructor(theme));
@@ -105,7 +101,7 @@ const TodayButton = (props: TodayButtonProps, ref: any) => {
       useNativeDriver: true
     };
   };
-  
+
   const getOpacityAnimation = () => {
     return {
       toValue: disabled ? disabledOpacity : 1,
@@ -133,17 +129,14 @@ const TodayButton = (props: TodayButtonProps, ref: any) => {
   };
 
   const onPress = useCallback(() => {
+    selectedUserDateInjected = () => getTodayDate();
     setDate(getTodayDate(), UpdateSources.TODAY_PRESS);
   }, [setDate]);
-
+  goToTodayInjected = onPress;
   return (
     <Animated.View style={[style.current.todayButtonContainer, {transform: [{translateY: buttonY.current}]}]}>
-      <TouchableOpacity
-        style={[style.current.todayButton, propsStyle]}
-        onPress={onPress}
-        disabled={disabled}
-      >
-        <Animated.Image style={[style.current.todayButtonImage, {opacity: opacity.current}]} source={buttonIcon}/>
+      <TouchableOpacity style={[style.current.todayButton, propsStyle]} onPress={onPress} disabled={disabled}>
+        <Animated.Image style={[style.current.todayButtonImage, {opacity: opacity.current}]} source={buttonIcon} />
         <Animated.Text allowFontScaling={false} style={[style.current.todayButtonText, {opacity: opacity.current}]}>
           {today.current}
         </Animated.Text>

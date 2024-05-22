@@ -36,6 +36,7 @@ export enum Positions {
   CLOSED = 'closed',
   OPEN = 'open'
 }
+export let goToCloseCalendarInjected = () => {};
 export let selectedUserDateInjected = () => {};
 const SPEED = 20;
 const BOUNCINESS = 6;
@@ -445,6 +446,7 @@ const ExpandableCalendar = (props: ExpandableCalendarProps) => {
       }
     }, 0);
   }, [isOpen, closedHeight]);
+  goToCloseCalendarInjected = closeCalendar;
 
   const toggleCalendarPosition = useCallback(() => {
     bounceToPosition(isOpen ? closedHeight : openHeight.current);
