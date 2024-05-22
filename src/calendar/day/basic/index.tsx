@@ -5,7 +5,7 @@ import {xdateToData} from '../../../interface';
 import {Theme, DayState, MarkingTypes, DateData} from '../../../types';
 import styleConstructor from './style';
 import Marking, {MarkingProps} from '../marking';
-
+import {selectedUserDateInjected} from 'src/expandableCalendar';
 
 export interface BasicDayProps extends ViewProps {
   state?: DayState;
@@ -51,6 +51,7 @@ const BasicDay = (props: BasicDayProps) => {
   const style = useRef(styleConstructor(theme));
   const _marking = marking || {};
   const isSelected = _marking.selected || state === 'selected';
+  const userSelectedDate = selectedUserDateInjected() === date;
   const isDisabled = typeof _marking.disabled !== 'undefined' ? _marking.disabled : state === 'disabled';
   const isInactive = _marking?.inactive;
   const isToday = state === 'today';
@@ -77,7 +78,7 @@ const BasicDay = (props: BasicDayProps) => {
     const {customStyles, selectedColor} = _marking;
     const styles = [style.current.base];
 
-    if (isSelected) {
+    if (userSelectedDate) {
       styles.push(style.current.selected);
       if (selectedColor) {
         styles.push({backgroundColor: selectedColor});
@@ -101,7 +102,7 @@ const BasicDay = (props: BasicDayProps) => {
     const {customStyles, selectedTextColor} = _marking;
     const styles = [style.current.text];
 
-    if (isSelected) {
+    if (userSelectedDate) {
       styles.push(style.current.selectedText);
       if (selectedTextColor) {
         styles.push({color: selectedTextColor});
