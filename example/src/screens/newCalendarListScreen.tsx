@@ -1,6 +1,6 @@
 import React, {useMemo, useState, useCallback} from 'react';
 import {StyleSheet, View, Switch, Text} from 'react-native';
-import {NewCalendarList} from 'react-native-calendars';
+import {NewCalendarList} from 'react-native-awesome-jalali-calendars';
 import testIDs from '../testIDs';
 
 const initialDate = '2020-05-16';

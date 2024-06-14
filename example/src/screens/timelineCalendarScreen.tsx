@@ -11,7 +11,7 @@ import {
   CalendarProvider,
   TimelineProps,
   CalendarUtils
-} from 'react-native-calendars';
+} from 'react-native-awesome-jalali-calendars';
 
 import {timelineEvents, getDate} from '../mocks/timelineEvents';
 

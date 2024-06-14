@@ -1,7 +1,7 @@
 import times from 'lodash/times';
 import React, {useState, useCallback, useMemo, useRef} from 'react';
 import {StyleSheet, View, ScrollView, Text, TouchableOpacity, Switch, Alert} from 'react-native';
-import {Calendar, CalendarUtils} from 'react-native-calendars';
+import {Calendar, CalendarUtils} from 'react-native-awesome-jalali-calendars';
 
 import testIDs from '../testIDs';
 import Marking from '../../../src/calendar/day/marking';

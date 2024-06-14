@@ -1,6 +1,6 @@
 import React, {useState, Fragment, useCallback, useMemo, useRef} from 'react';
 import {StyleSheet, View, ScrollView, Text, TouchableOpacity} from 'react-native';
-import {Calendar, CalendarUtils} from 'react-native-calendars';
+import {Calendar, CalendarUtils} from 'react-native-awesome-jalali-calendars';
 import testIDs from '../testIDs';
 
 const INITIAL_DATE = '2022-07-06';

@@ -1,4 +1,4 @@
-import {TimelineEventProps, CalendarUtils} from 'react-native-calendars';
+import {TimelineEventProps, CalendarUtils} from 'react-native-awesome-jalali-calendars';
 
 const EVENT_COLOR = '#e6add8';
 const today = new Date();

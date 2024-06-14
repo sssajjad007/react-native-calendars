@@ -1,6 +1,6 @@
 import React, {useState, useCallback, useMemo} from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
-import {Profiler, Calendar, CalendarList, ExpandableCalendar, CalendarProvider} from 'react-native-calendars';
+import {Profiler, Calendar, CalendarList, ExpandableCalendar, CalendarProvider} from 'react-native-awesome-jalali-calendars';
 
 const INITIAL_DATE = '2022-07-07';
 const enum elements {
