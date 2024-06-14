@@ -68,6 +68,8 @@ export interface CalendarHeaderProps {
   current?: string;
   /** Left inset for the timeline calendar header, default is 72 */
   timelineLeftInset?: number;
+  //** weekend color */
+  weekendColor?: string;
 }
 
 const accessibilityActions = [
@@ -102,9 +104,10 @@ const CalendarHeader = forwardRef((props: CalendarHeaderProps, ref) => {
     importantForAccessibility,
     numberOfDays,
     current = '',
-    timelineLeftInset
+    timelineLeftInset,
+    weekendColor
   } = props;
-  
+
   const numberOfDaysCondition = useMemo(() => {
     return numberOfDays && numberOfDays > 1;
   }, [numberOfDays]);
@@ -125,7 +128,7 @@ const CalendarHeader = forwardRef((props: CalendarHeaderProps, ref) => {
         : arrowsHitSlop,
     [arrowsHitSlop]
   );
-  
+
   useImperativeHandle(ref, () => ({
     onPressLeft,
     onPressRight
@@ -153,27 +156,34 @@ const CalendarHeader = forwardRef((props: CalendarHeaderProps, ref) => {
     return addMonth();
   }, [onPressArrowRight, addMonth, month]);
 
-  const onAccessibilityAction = useCallback((event: AccessibilityActionEvent) => {
-    switch (event.nativeEvent.actionName) {
-      case 'decrement':
-        onPressLeft();
-        break;
-      case 'increment':
-        onPressRight();
-        break;
-      default:
-        break;
-    }
-  }, [onPressLeft, onPressRight]);
+  const onAccessibilityAction = useCallback(
+    (event: AccessibilityActionEvent) => {
+      switch (event.nativeEvent.actionName) {
+        case 'decrement':
+          onPressLeft();
+          break;
+        case 'increment':
+          onPressRight();
+          break;
+        default:
+          break;
+      }
+    },
+    [onPressLeft, onPressRight]
+  );
 
   const renderWeekDays = useMemo(() => {
     const dayOfTheWeek = new XDate(current).getDay();
     const weekDaysNames = numberOfDaysCondition ? weekDayNames(dayOfTheWeek) : weekDayNames(firstDay);
     const dayNames = numberOfDaysCondition ? weekDaysNames.slice(0, numberOfDays) : weekDaysNames;
+    const weekendIndex = [0, 6];
 
     return dayNames.map((day: string, index: number) => {
+      const hasWeekendColor = weekendIndex.includes(index);
       const dayStyle = [style.current.dayHeader];
-
+      if (hasWeekendColor) {
+        dayStyle.push({color: weekendColor});
+      }
       if (includes(disabledDaysIndexes, index)) {
         dayStyle.push(style.current.disabledDayHeader);
       }
@@ -184,7 +194,14 @@ const CalendarHeader = forwardRef((props: CalendarHeaderProps, ref) => {
       }
 
       return (
-        <Text allowFontScaling={false} key={index} style={dayStyle} numberOfLines={1} accessibilityLabel={''}>
+        <Text
+          allowFontScaling={false}
+          key={index}
+          //
+          style={[dayStyle]}
+          numberOfLines={1}
+          accessibilityLabel={''}
+        >
           {day}
         </Text>
       );
@@ -204,12 +221,7 @@ const CalendarHeader = forwardRef((props: CalendarHeaderProps, ref) => {
 
     return (
       <Fragment>
-        <Text
-          allowFontScaling={false}
-          style={style.current.monthText}
-          testID={`${testID}.title`}
-          {...webProps}
-        >
+        <Text allowFontScaling={false} style={style.current.monthText} testID={`${testID}.title`} {...webProps}>
           {formatNumbers(month?.toString(monthFormat))}
         </Text>
       </Fragment>
@@ -218,16 +230,16 @@ const CalendarHeader = forwardRef((props: CalendarHeaderProps, ref) => {
 
   const _renderArrow = (direction: Direction) => {
     if (hideArrows) {
-      return <View/>;
+      return <View />;
     }
 
     const isLeft = direction === 'left';
     const arrowId = isLeft ? 'leftArrow' : 'rightArrow';
     const shouldDisable = isLeft ? disableArrowLeft : disableArrowRight;
-    const onPress = !shouldDisable ? isLeft ? onPressLeft : onPressRight : undefined;
+    const onPress = !shouldDisable ? (isLeft ? onPressLeft : onPressRight) : undefined;
     const imageSource = isLeft ? require('../img/previous.png') : require('../img/next.png');
-    const renderArrowDirection = isLeft ? 'left' : 'right';   
-      
+    const renderArrowDirection = isLeft ? 'left' : 'right';
+
     return (
       <TouchableOpacity
         onPress={onPress}
@@ -239,7 +251,10 @@ const CalendarHeader = forwardRef((props: CalendarHeaderProps, ref) => {
         {renderArrow ? (
           renderArrow(renderArrowDirection)
         ) : (
-          <Image source={imageSource} style={shouldDisable ? style.current.disabledArrowImage : style.current.arrowImage}/>
+          <Image
+            source={imageSource}
+            style={shouldDisable ? style.current.disabledArrowImage : style.current.arrowImage}
+          />
         )}
       </TouchableOpacity>
     );
@@ -247,12 +262,7 @@ const CalendarHeader = forwardRef((props: CalendarHeaderProps, ref) => {
 
   const renderIndicator = () => {
     if (displayLoadingIndicator) {
-      return (
-        <ActivityIndicator
-          color={theme?.indicatorColor as ColorValue}
-          testID={`${testID}.loader`}
-        />
-      );
+      return <ActivityIndicator color={theme?.indicatorColor as ColorValue} testID={`${testID}.loader`} />;
     }
   };
 
@@ -263,10 +273,7 @@ const CalendarHeader = forwardRef((props: CalendarHeaderProps, ref) => {
   const renderDayNames = () => {
     if (!hideDayNames) {
       return (
-        <View
-          style={dayNamesStyle}
-          testID={`${testID}.dayNames`}
-        >
+        <View style={dayNamesStyle} testID={`${testID}.dayNames`}>
           {renderWeekNumbersSpace()}
           {renderWeekDays}
         </View>

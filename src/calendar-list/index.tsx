@@ -71,6 +71,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
     headerStyle,
     onMonthChange,
     onVisibleMonthsChange,
+    weekendColor,
     /** CalendarList props */
     pastScrollRange = PAST_SCROLL_RANGE,
     futureScrollRange = FUTURE_SCROLL_RANGE,
@@ -280,6 +281,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
           style={staticHeaderStyle}
           month={currentMonth}
           addMonth={addMonth}
+          weekendColor={weekendColor}
           accessibilityElementsHidden={true} // iOS
           importantForAccessibility={'no-hide-descendants'} // Android
         />
