@@ -19,7 +19,7 @@
     "declaration": true,
     "baseUrl": ".",
     "paths": {
-      "react-native-calendars": ["src/index.ts"]
+      "react-native-awesome-jalali-calendars": ["src/index.ts"]
     }
   },
   // "include": ["src/calendar/day/basic", "src/global.d.ts"],
